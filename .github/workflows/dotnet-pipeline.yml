@@ -10,6 +10,10 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     
+    defaults:
+      run:
+        working-directory: dotnet
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -21,28 +25,18 @@ jobs:
         
     - name: Restore dependencies
       run: dotnet restore
-      continue-on-error: true
       
     - name: Build project
       run: dotnet build --no-restore --configuration Release
-      continue-on-error: true
       
     - name: Run tests
       run: dotnet test --no-build --verbosity normal
       continue-on-error: true
       
-    - name: Intentional failure check
-      run: |
-        echo "Pipeline test with intentional failure"
-        echo "This step demonstrates how pipeline failures are handled"
-        exit 1
-      continue-on-error: false
-      
     - name: Code quality analysis
       run: |
         echo "Running code quality checks..."
         echo "Linting dotnet files"
-      continue-on-error: true
 
   documentation:
     runs-on: ubuntu-latest
